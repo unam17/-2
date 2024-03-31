@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board List</title>
+</head>
+<body>
+    <h1>Board List</h1>
+    
+    <ul>
+        {% for board in boards %}
+        <li><a href="{% url 'board_detail' board.id %}">{{ board.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>새로운 게시글 작성</h2>
+    <form method="post" action="{% url 'board_create' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">게시글 작성</button>
+    </form>
+
+    <h2>게시글 필터링</h2>
+    <form action="{% url 'board_list' %}" method="GET">
+        <select name="category">
+            <option value="" {% if not request.GET.category %}selected{% endif %}>All</option>
+            <option value="세션" {% if request.GET.category == '세션' %}selected{% endif %}>세션</option>
+            <option value="실습" {% if request.GET.category == '실습' %}selected{% endif %}>실습</option>
+            <option value="과제" {% if request.GET.category == '과제' %}selected{% endif %}>과제</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+</body>
+</html>
